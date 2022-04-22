@@ -59,3 +59,24 @@ test(`Can't place horizontal ship out of gameboard`, () => {
 test(`Can't place vertical ship out of gameboard`, () => {
   expect(testGameboard.placeShip(3, 9, 9, true)).toBe(false);
 });
+
+test(`Attack gameboard`, () => {
+  testGameboard.receiveAttack(1, 6);
+  expect(testGameboard.displayGameboard().slice(16, 17)).toStrictEqual([1]);
+});
+
+test('Attacked horizontal ship is damaged', () => {
+  expect(testGameboard.displayShips().patrolBoat.displayShip()).toStrictEqual([
+    'pb',
+    1,
+  ]);
+});
+
+test('Attack vertical ship is damaged', () => {
+  testGameboard.receiveAttack(6, 2);
+  expect(testGameboard.displayShips().submarine.displayShip()).toStrictEqual([
+    'sb',
+    1,
+    'sb',
+  ]);
+});

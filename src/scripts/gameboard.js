@@ -14,7 +14,7 @@ const Gameboard = () => {
   };
 
   const placeShip = (shipLength, startY, startX, isVertical) => {
-    const newShip = _createShip(shipLength);
+    let newShip;
     const indexOfStartField = startY * 10 + startX;
 
     const isFieldsFree = _checkFreeFields(
@@ -29,6 +29,8 @@ const Gameboard = () => {
     );
     if (!isFieldsFree || !isShipInGameboard) {
       return false;
+    } else {
+      newShip = _createShip(shipLength);
     }
 
     newShip.displayShip().forEach((elem, index) => {
@@ -99,7 +101,49 @@ const Gameboard = () => {
     }
   };
 
-  return { displayGameboard, placeShip };
+  const receiveAttack = (coordY, coordX) => {
+    const attackedFieldIndex = coordY * 10 + coordX;
+
+    if (typeof _gameboard[attackedFieldIndex] === 'string') {
+      const attackedShipMark = _gameboard[attackedFieldIndex];
+
+      let numberOfShipFields = 0;
+      let attackedShipFieldIndex;
+
+      _gameboard.forEach((elem, index) => {
+        if (elem === attackedShipMark) {
+          numberOfShipFields += 1;
+        }
+        if (index === attackedFieldIndex) {
+          attackedShipFieldIndex = numberOfShipFields - 1;
+        }
+      });
+
+      _attackShip(attackedShipMark, attackedShipFieldIndex);
+    }
+
+    _gameboard[attackedFieldIndex] = 1;
+  };
+
+  const _attackShip = (shipMark, attackedField) => {
+    if (shipMark === 'pb') {
+      patrolBoat.hit(attackedField);
+    } else if (shipMark === 'sb') {
+      submarine.hit(attackedField);
+    } else if (shipMark === 'ds') {
+      destroyer.hit(attackedField);
+    } else if (shipMark === 'bs') {
+      battleship.hit(attackedField);
+    } else if (shipMark === 'cr') {
+      carrier.hit(attackedField);
+    }
+  };
+
+  const displayShips = () => {
+    return { patrolBoat, submarine, destroyer, battleship, carrier };
+  };
+
+  return { displayGameboard, placeShip, receiveAttack, displayShips };
 };
 
 export default Gameboard;
