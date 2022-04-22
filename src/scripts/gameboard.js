@@ -17,12 +17,17 @@ const Gameboard = () => {
     const newShip = _createShip(shipLength);
     const indexOfStartField = startY * 10 + startX;
 
-    const isShipPlaceable = _checkIfShipIsPlaceable(
+    const isFieldsFree = _checkFreeFields(
       shipLength,
       indexOfStartField,
       isVertical
     );
-    if (!isShipPlaceable) {
+    const isShipInGameboard = _checkShipWithinGameboard(
+      shipLength,
+      indexOfStartField,
+      isVertical
+    );
+    if (!isFieldsFree || !isShipInGameboard) {
       return false;
     }
 
@@ -56,7 +61,7 @@ const Gameboard = () => {
     }
   };
 
-  const _checkIfShipIsPlaceable = (shipLength, startField, isVertical) => {
+  const _checkFreeFields = (shipLength, startField, isVertical) => {
     if (isVertical) {
       let rowNumber = 0;
       const gameboardFields = _gameboard.filter((elem, index) => {
@@ -74,6 +79,23 @@ const Gameboard = () => {
       );
 
       return !gameboardFields.some((field) => /[a-z]/.test(field));
+    }
+  };
+
+  const _checkShipWithinGameboard = (shipLength, startField, isVertical) => {
+    if (isVertical) {
+      const lastDecimal = Math.floor((startField + (shipLength - 1) * 10) / 10);
+      if (lastDecimal > 9) {
+        return false;
+      }
+      return true;
+    } else {
+      const firstDecimal = Math.floor(startField / 10);
+      const lastDecimal = Math.floor((startField + shipLength - 1) / 10);
+      if (firstDecimal !== lastDecimal) {
+        return false;
+      }
+      return true;
     }
   };
 

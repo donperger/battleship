@@ -51,3 +51,11 @@ test(`Can't place horizontal ship on another one`, () => {
 test(`Can't place vertical ship on another one`, () => {
   expect(testGameboard.placeShip(3, 0, 5, true)).toBe(false);
 });
+
+test(`Can't place horizontal ship out of gameboard`, () => {
+  expect(testGameboard.placeShip(3, 6, 9, false)).toBe(false);
+});
+
+test(`Can't place vertical ship out of gameboard`, () => {
+  expect(testGameboard.placeShip(3, 9, 9, true)).toBe(false);
+});
