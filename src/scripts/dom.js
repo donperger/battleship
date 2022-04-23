@@ -6,6 +6,7 @@ function displayGameboardGrid(gameboardArray, gameboardOwner) {
 
   gameboardArray.forEach((elem, index) => {
     const gbField = document.createElement('div');
+    gbField.classList.add(`${gameboardOwner}-field`);
     gbField.id = `${gameboardOwner}-${index}`;
     gbField.textContent = elem;
     gridContainer.appendChild(gbField);
@@ -14,4 +15,12 @@ function displayGameboardGrid(gameboardArray, gameboardOwner) {
   _battlefieldContainer.appendChild(gridContainer);
 }
 
-export { displayGameboardGrid };
+function cleanOutBFContainer() {
+  _battlefieldContainer.textContent = '';
+}
+
+function displayAttack(field) {
+  field.textContent = 'X';
+}
+
+export { displayGameboardGrid, cleanOutBFContainer, displayAttack };
