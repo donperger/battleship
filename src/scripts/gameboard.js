@@ -45,6 +45,8 @@ const Gameboard = () => {
         _gameboard.splice(indexOfStartField + index, 1, elem);
       }
     });
+
+    return true;
   };
 
   const _createShip = (shipLength) => {
