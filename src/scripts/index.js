@@ -4,7 +4,13 @@ import '../styles/gameboard.css';
 
 import { Player, getRandomInt } from './player';
 import Gameboard from './gameboard';
-import { displayGameboardGrid } from './dom';
+import {
+  cleanOutBFContainer,
+  displayAttack,
+  displayGameboardGrid,
+} from './dom';
+
+let isPlayersTurn = true;
 
 const player = Player('Human', true);
 const computer = Player('Computer', false);
@@ -15,6 +21,37 @@ placeShipsRandomly(playerGameboard);
 placeShipsRandomly(computerGameboard);
 displayGameboardGrid(playerGameboard.displayGameboard(), 'player');
 displayGameboardGrid(computerGameboard.displayGameboard(), 'enemy');
+
+const playerFields = document.querySelectorAll('.player-field');
+const enemyFields = document.querySelectorAll('.enemy-field');
+
+playerFields.forEach((elem) => {
+  elem.addEventListener('click', () => {
+    if (!isPlayersTurn && elem.textContent !== 'X') {
+      const row = breakUpFieldId(elem).row;
+      const column = breakUpFieldId(elem).column;
+
+      computer.attackGameboard(playerGameboard, row, column);
+      displayAttack(elem);
+
+      isPlayersTurn = true;
+    }
+  });
+});
+
+enemyFields.forEach((elem) => {
+  elem.addEventListener('click', () => {
+    if (isPlayersTurn && elem.textContent !== 'X') {
+      const row = breakUpFieldId(elem).row;
+      const column = breakUpFieldId(elem).column;
+
+      player.attackGameboard(computerGameboard, row, column);
+      displayAttack(elem);
+
+      isPlayersTurn = false;
+    }
+  });
+});
 
 function placeShipsRandomly(gameboard) {
   const lengths = [2, 3, 3, 4, 5];
@@ -46,4 +83,12 @@ function generatePlaceData() {
   const direction = getRandomInt(2) === 0 ? true : false;
 
   return { row, column, direction };
+}
+
+function breakUpFieldId(filed) {
+  const filedNumber = Number(filed.id.split('-')[1]);
+  const row = Math.floor(filedNumber / 10);
+  const column = filedNumber - row * 10;
+
+  return { row, column };
 }
