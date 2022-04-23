@@ -62,7 +62,7 @@ test(`Can't place vertical ship out of gameboard`, () => {
 
 test(`Attack gameboard`, () => {
   testGameboard.receiveAttack(1, 6);
-  expect(testGameboard.displayGameboard().slice(16, 17)).toStrictEqual([1]);
+  expect(testGameboard.displayAttacks().slice(16, 17)).toStrictEqual([1]);
 });
 
 test('Attacked horizontal ship is damaged', () => {
@@ -79,4 +79,17 @@ test('Attack vertical ship is damaged', () => {
     1,
     'sb',
   ]);
+});
+
+test('No false sank report', () => {
+  expect(testGameboard.isFleetDestroyed()).toBe(false);
+});
+
+test('Report if all of the ships sank', () => {
+  testGameboard.receiveAttack(1, 5);
+  testGameboard.receiveAttack(5, 2);
+  testGameboard.receiveAttack(7, 2);
+
+  expect(testGameboard.displayShips().patrolBoat.isSunk()).toBe(true);
+  expect(testGameboard.displayShips().submarine.isSunk()).toBe(true);
 });

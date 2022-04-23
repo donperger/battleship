@@ -2,6 +2,7 @@ import Ship from './ship';
 
 const Gameboard = () => {
   const _gameboard = new Array(100).fill(0);
+  const _attackedGameboardFields = new Array(100).fill(0);
 
   let patrolBoat;
   let submarine;
@@ -11,6 +12,10 @@ const Gameboard = () => {
 
   const displayGameboard = () => {
     return _gameboard;
+  };
+
+  const displayAttacks = () => {
+    return _attackedGameboardFields;
   };
 
   const placeShip = (shipLength, startY, startX, isVertical) => {
@@ -106,23 +111,19 @@ const Gameboard = () => {
 
     if (typeof _gameboard[attackedFieldIndex] === 'string') {
       const attackedShipMark = _gameboard[attackedFieldIndex];
-
-      let numberOfShipFields = 0;
-      let attackedShipFieldIndex;
+      const shipHologram = [];
 
       _gameboard.forEach((elem, index) => {
         if (elem === attackedShipMark) {
-          numberOfShipFields += 1;
-        }
-        if (index === attackedFieldIndex) {
-          attackedShipFieldIndex = numberOfShipFields - 1;
+          shipHologram.push(index);
         }
       });
 
+      const attackedShipFieldIndex = shipHologram.indexOf(attackedFieldIndex);
       _attackShip(attackedShipMark, attackedShipFieldIndex);
     }
 
-    _gameboard[attackedFieldIndex] = 1;
+    _attackedGameboardFields[attackedFieldIndex] = 1;
   };
 
   const _attackShip = (shipMark, attackedField) => {
@@ -143,7 +144,24 @@ const Gameboard = () => {
     return { patrolBoat, submarine, destroyer, battleship, carrier };
   };
 
-  return { displayGameboard, placeShip, receiveAttack, displayShips };
+  const isFleetDestroyed = () => {
+    return (
+      patrolBoat.isSunk() &&
+      submarine.isSunk() &&
+      destroyer.isSunk() &&
+      battleship.isSunk() &&
+      carrier.isSunk()
+    );
+  };
+
+  return {
+    displayGameboard,
+    displayAttacks,
+    placeShip,
+    receiveAttack,
+    displayShips,
+    isFleetDestroyed,
+  };
 };
 
 export default Gameboard;
