@@ -1,4 +1,5 @@
 import Ship from './ship';
+import { getRandomInt } from './player';
 
 const Gameboard = () => {
   const _gameboard = new Array(100).fill(0);
@@ -156,6 +157,38 @@ const Gameboard = () => {
     );
   };
 
+  function placeShipsRandomly() {
+    const lengths = [2, 3, 3, 4, 5];
+
+    lengths.forEach((elem) => {
+      let placeData = _generatePlaceData();
+      let isShipPlaced = placeShip(
+        elem,
+        placeData.row,
+        placeData.column,
+        placeData.direction
+      );
+
+      while (!isShipPlaced) {
+        placeData = _generatePlaceData();
+        isShipPlaced = placeShip(
+          elem,
+          placeData.row,
+          placeData.column,
+          placeData.direction
+        );
+      }
+    });
+  }
+
+  function _generatePlaceData() {
+    const row = getRandomInt(10);
+    const column = getRandomInt(10);
+    const direction = getRandomInt(2) === 0 ? true : false;
+
+    return { row, column, direction };
+  }
+
   return {
     displayGameboard,
     displayAttacks,
@@ -163,6 +196,7 @@ const Gameboard = () => {
     receiveAttack,
     displayShips,
     isFleetDestroyed,
+    placeShipsRandomly,
   };
 };
 
