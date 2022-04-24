@@ -1,9 +1,30 @@
+:root {
+  --field-border-clr: #0d0d0d;
+  --filed-bg-clr: #f2c335;
+  --hit-bg-clr: #a68524;
+}
+
 div[class^='gb'] {
+  box-sizing: border-box;
+  margin: 1rem;
   display: grid;
   grid-template-columns: repeat(10, 3rem);
+  grid-template-rows: repeat(10, 3rem);
   place-items: center;
+}
+
+div[class$='field'],
+.hit {
+  border: 0.2rem solid var(--field-border-clr);
+  width: 100%;
+  height: 100%;
 }
 
 div[class$='field'] {
   cursor: pointer;
+  background-color: var(--filed-bg-clr);
+}
+
+.hit {
+  background-color: var(--hit-bg-clr);
 }

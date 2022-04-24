@@ -1,10 +1,35 @@
 :root {
-  --footer-height: 5vh;
+  --header-height: 3rem;
+  --header-bg-clr: #0d0d0d;
+  --header-font-clr: #f2c335;
+  --bf-bg-clr: #f2e63d;
+  --footer-height: 3rem;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  height: var(--header-height);
+  background-color: var(--header-bg-clr);
+  color: var(--header-font-clr);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bf-title {
+  font-size: 2rem;
+  font-weight: 600;
 }
 
 .bf-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  height: calc(100vh - var(--header-height) - var(--footer-height));
+  background-color: var(--bf-bg-clr);
 }
 
 footer {
@@ -16,6 +41,8 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: var(--header-font-clr);
+  color: var(--header-bg-clr);
 }
 
 .github-icon {

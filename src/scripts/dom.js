@@ -20,7 +20,7 @@ function cleanOutBFContainer() {
 }
 
 function displayAttack(field) {
-  field.textContent = 'X';
+  field.classList.add('hit');
 }
 
 function displayWinner(winner) {
