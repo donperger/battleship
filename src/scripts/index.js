@@ -1,6 +1,7 @@
 import '../img/icons8-github.svg';
 import '../styles/main.css';
 import '../styles/gameboard.css';
+import '../styles/winner.css';
 
 import { Player, getRandomInt } from './player';
 import Gameboard from './gameboard';
@@ -8,6 +9,7 @@ import {
   cleanOutBFContainer,
   displayAttack,
   displayGameboardGrid,
+  displayWinner,
 } from './dom';
 
 let isPlayersTurn = true;
@@ -15,12 +17,13 @@ let isPlayersTurn = true;
 const player = Player('Human', true);
 const computer = Player('Computer', false);
 const playerGameboard = Gameboard();
-const computerGameboard = Gameboard();
+const enemyGameboard = Gameboard();
 
-placeShipsRandomly(playerGameboard);
-placeShipsRandomly(computerGameboard);
+playerGameboard.placeShipsRandomly();
+enemyGameboard.placeShipsRandomly();
+
 displayGameboardGrid(playerGameboard.displayGameboard(), 'player');
-displayGameboardGrid(computerGameboard.displayGameboard(), 'enemy');
+displayGameboardGrid(enemyGameboard.displayGameboard(), 'enemy');
 
 const playerFields = document.querySelectorAll('.player-field');
 const enemyFields = document.querySelectorAll('.enemy-field');
@@ -36,6 +39,10 @@ playerFields.forEach((elem) => {
 
       isPlayersTurn = true;
     }
+
+    if (playerGameboard.isFleetDestroyed()) {
+      displayWinner(computer.name);
+    }
   });
 });
 
@@ -45,45 +52,17 @@ enemyFields.forEach((elem) => {
       const row = breakUpFieldId(elem).row;
       const column = breakUpFieldId(elem).column;
 
-      player.attackGameboard(computerGameboard, row, column);
+      player.attackGameboard(enemyGameboard, row, column);
       displayAttack(elem);
 
       isPlayersTurn = false;
     }
-  });
-});
 
-function placeShipsRandomly(gameboard) {
-  const lengths = [2, 3, 3, 4, 5];
-
-  lengths.forEach((elem) => {
-    let placeData = generatePlaceData();
-    let isShipPlaced = gameboard.placeShip(
-      elem,
-      placeData.row,
-      placeData.column,
-      placeData.direction
-    );
-
-    while (!isShipPlaced) {
-      placeData = generatePlaceData();
-      isShipPlaced = gameboard.placeShip(
-        elem,
-        placeData.row,
-        placeData.column,
-        placeData.direction
-      );
+    if (enemyGameboard.isFleetDestroyed()) {
+      displayWinner(player.name);
     }
   });
-}
-
-function generatePlaceData() {
-  const row = getRandomInt(10);
-  const column = getRandomInt(10);
-  const direction = getRandomInt(2) === 0 ? true : false;
-
-  return { row, column, direction };
-}
+});
 
 function breakUpFieldId(filed) {
   const filedNumber = Number(filed.id.split('-')[1]);

@@ -1,0 +1,10 @@
+.winner {
+  position: absolute;
+  top: 45vh;
+  left: 0;
+  width: 100vw;
+  height: 10vh;
+  background-color: rgba(66, 66, 66, 0.3);
+  font-weight: 600;
+  font-size: 3rem;
+}

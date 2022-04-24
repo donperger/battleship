@@ -23,4 +23,17 @@ function displayAttack(field) {
   field.textContent = 'X';
 }
 
-export { displayGameboardGrid, cleanOutBFContainer, displayAttack };
+function displayWinner(winner) {
+  const winnerDiv = document.createElement('div');
+  winnerDiv.classList.add('winner');
+  winnerDiv.textContent = `Congratulation ${winner} you are the best fleet captain!`;
+
+  _battlefieldContainer.appendChild(winnerDiv);
+}
+
+export {
+  displayGameboardGrid,
+  cleanOutBFContainer,
+  displayAttack,
+  displayWinner,
+};
