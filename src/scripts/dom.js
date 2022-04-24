@@ -1,3 +1,5 @@
+import { makeDragable } from './drag-n-drop';
+
 const _battlefieldContainer = document.querySelector('.bf-container');
 const _gameboardContainer = document.querySelector('.gb-container');
 
@@ -20,8 +22,12 @@ function cleanOutBFContainer() {
   _battlefieldContainer.textContent = '';
 }
 
-function displayAttack(field) {
-  field.classList.add('hit');
+function displayAttack(field, isShip) {
+  if (isShip) {
+    field.classList.add('hit');
+  } else {
+    field.classList.add('attacked');
+  }
 }
 
 function displayWinner(winner) {
@@ -65,17 +71,24 @@ function _creatShipListItem(shipname, shipLength) {
   const shipContainer = document.createElement('div');
   shipContainer.classList.add('ship-container');
 
+  const shipContId = _convertToId(shipname);
+  shipContainer.id = shipContId;
+
   for (let i = 0; i < shipLength; i++) {
     const shipField = document.createElement('div');
     shipField.classList.add('ship-field');
     shipContainer.appendChild(shipField);
   }
 
-  shipContainer.setAttribute('draggable', true);
+  makeDragable(shipContainer);
 
   item.appendChild(shipContainer);
 
   return item;
+}
+
+function _convertToId(name) {
+  return name.toLowerCase().replace(/ /g, '-');
 }
 
 export {
