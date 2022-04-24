@@ -14,55 +14,73 @@ import {
 
 let isPlayersTurn = true;
 
-const player = Player('Human', true);
-const computer = Player('Computer', false);
-const playerGameboard = Gameboard();
-const enemyGameboard = Gameboard();
+setUpGame('Human', 'Computer', false);
 
-playerGameboard.placeShipsRandomly();
-enemyGameboard.placeShipsRandomly();
+function setUpGame(player1Name, player2Name, isPlayer2Human) {
+  isPlayersTurn = true;
 
-displayGameboardGrid(playerGameboard.displayGameboard(), 'player');
-displayGameboardGrid(enemyGameboard.displayGameboard(), 'enemy');
+  const player = Player(player1Name, true);
+  const enemy = Player(player2Name, isPlayer2Human);
+  const playerGameboard = Gameboard();
+  const enemyGameboard = Gameboard();
 
-const playerFields = document.querySelectorAll('.player-field');
-const enemyFields = document.querySelectorAll('.enemy-field');
+  playerGameboard.placeShipsRandomly();
+  enemyGameboard.placeShipsRandomly();
 
-playerFields.forEach((elem) => {
-  elem.addEventListener('click', () => {
-    if (!isPlayersTurn && elem.textContent !== 'X') {
-      const row = breakUpFieldId(elem).row;
-      const column = breakUpFieldId(elem).column;
+  displayGameboardGrid(playerGameboard.displayGameboard(), 'player');
+  displayGameboardGrid(enemyGameboard.displayGameboard(), 'enemy');
 
-      computer.attackGameboard(playerGameboard, row, column);
-      displayAttack(elem);
+  const playerFields = document.querySelectorAll('.player-field');
+  const enemyFields = document.querySelectorAll('.enemy-field');
 
-      isPlayersTurn = true;
-    }
+  enemyFields.forEach((elem) => {
+    elem.addEventListener('click', () => {
+      if (isPlayersTurn && elem.textContent !== 'X') {
+        const row = breakUpFieldId(elem).row;
+        const column = breakUpFieldId(elem).column;
 
-    if (playerGameboard.isFleetDestroyed()) {
-      displayWinner(computer.name);
-    }
+        player.attackGameboard(enemyGameboard, row, column);
+        displayAttack(elem);
+
+        isPlayersTurn = false;
+      }
+
+      if (enemyGameboard.isFleetDestroyed()) {
+        displayWinner(player.name);
+      }
+
+      if (!isPlayer2Human && !isPlayersTurn) {
+        const attackedFieldNumber = enemy.aiAttack(playerGameboard);
+        const attackField = document.querySelector(
+          `#player-${attackedFieldNumber}`
+        );
+        displayAttack(attackField);
+
+        isPlayersTurn = true;
+      }
+    });
   });
-});
 
-enemyFields.forEach((elem) => {
-  elem.addEventListener('click', () => {
-    if (isPlayersTurn && elem.textContent !== 'X') {
-      const row = breakUpFieldId(elem).row;
-      const column = breakUpFieldId(elem).column;
+  if (isPlayer2Human) {
+    playerFields.forEach((elem) => {
+      elem.addEventListener('click', () => {
+        if (!isPlayersTurn && elem.textContent !== 'X') {
+          const row = breakUpFieldId(elem).row;
+          const column = breakUpFieldId(elem).column;
 
-      player.attackGameboard(enemyGameboard, row, column);
-      displayAttack(elem);
+          enemy.attackGameboard(playerGameboard, row, column);
+          displayAttack(elem);
 
-      isPlayersTurn = false;
-    }
+          isPlayersTurn = true;
+        }
 
-    if (enemyGameboard.isFleetDestroyed()) {
-      displayWinner(player.name);
-    }
-  });
-});
+        if (playerGameboard.isFleetDestroyed()) {
+          displayWinner(enemy.name);
+        }
+      });
+    });
+  }
+}
 
 function breakUpFieldId(filed) {
   const filedNumber = Number(filed.id.split('-')[1]);
