@@ -2,13 +2,14 @@ import '../img/icons8-github.svg';
 import '../styles/main.css';
 import '../styles/gameboard.css';
 import '../styles/winner.css';
+import '../styles/ship-list.css';
 
-import { Player, getRandomInt } from './player';
+import { Player } from './player';
 import Gameboard from './gameboard';
 import {
-  cleanOutBFContainer,
   displayAttack,
   displayGameboardGrid,
+  displayShipList,
   displayWinner,
 } from './dom';
 
@@ -30,6 +31,8 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
   displayGameboardGrid(playerGameboard.displayGameboard(), 'player');
   displayGameboardGrid(enemyGameboard.displayGameboard(), 'enemy');
 
+  displayShipList();
+
   const playerFields = document.querySelectorAll('.player-field');
   const enemyFields = document.querySelectorAll('.enemy-field');
 
@@ -43,10 +46,10 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
         displayAttack(elem);
 
         isPlayersTurn = false;
-      }
 
-      if (enemyGameboard.isFleetDestroyed()) {
-        displayWinner(player.name);
+        if (enemyGameboard.isFleetDestroyed()) {
+          displayWinner(player.name);
+        }
       }
 
       if (!isPlayer2Human && !isPlayersTurn) {
@@ -57,6 +60,10 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
         displayAttack(attackField);
 
         isPlayersTurn = true;
+
+        if (playerGameboard.isFleetDestroyed()) {
+          displayWinner(enemy.name);
+        }
       }
     });
   });
@@ -72,10 +79,10 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
           displayAttack(elem);
 
           isPlayersTurn = true;
-        }
 
-        if (playerGameboard.isFleetDestroyed()) {
-          displayWinner(enemy.name);
+          if (playerGameboard.isFleetDestroyed()) {
+            displayWinner(enemy.name);
+          }
         }
       });
     });

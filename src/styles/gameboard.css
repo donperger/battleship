@@ -1,10 +1,17 @@
 :root {
   --field-border-clr: #0d0d0d;
   --filed-bg-clr: #f2c335;
-  --hit-bg-clr: #a68524;
+  --attacked-bg-clr: #fff;
+  --hit-bg-clr: ;
 }
 
-div[class^='gb'] {
+.gb-container {
+  width: 100vw;
+  display: flex;
+  justify-content: space-around;
+}
+
+.gb-container > div[class^='gb'] {
   box-sizing: border-box;
   margin: 1rem;
   display: grid;
@@ -13,7 +20,7 @@ div[class^='gb'] {
   place-items: center;
 }
 
-div[class$='field'],
+div[class^='gb'] > div[class$='field'],
 .hit {
   border: 0.2rem solid var(--field-border-clr);
   width: 100%;
@@ -26,5 +33,5 @@ div[class$='field'] {
 }
 
 .hit {
-  background-color: var(--hit-bg-clr);
+  background-color: var(--attacked-bg-clr);
 }

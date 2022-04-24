@@ -1,0 +1,18 @@
+:root {
+  --ship-field-bg-clr: rgb(228, 122, 0);
+}
+
+.ship-container {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(auto-fit, 1.8rem);
+  width: max-content;
+}
+
+.ship-container .ship-field {
+  box-sizing: border-box;
+  border: 0.2rem solid var(--field-border-clr);
+  background-color: var(--ship-field-bg-clr);
+  height: 2rem;
+  width: 2rem;
+}
