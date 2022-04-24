@@ -38,17 +38,23 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
 
   enemyFields.forEach((elem) => {
     elem.addEventListener('click', () => {
-      if (isPlayersTurn && elem.textContent !== 'X') {
+      if (isPlayersTurn) {
         const row = breakUpFieldId(elem).row;
         const column = breakUpFieldId(elem).column;
 
-        player.attackGameboard(enemyGameboard, row, column);
-        displayAttack(elem);
+        const isAttackTookPlace = player.attackGameboard(
+          enemyGameboard,
+          row,
+          column
+        );
+        if (isAttackTookPlace) {
+          displayAttack(elem);
 
-        isPlayersTurn = false;
+          isPlayersTurn = false;
 
-        if (enemyGameboard.isFleetDestroyed()) {
-          displayWinner(player.name);
+          if (enemyGameboard.isFleetDestroyed()) {
+            displayWinner(player.name);
+          }
         }
       }
 
@@ -71,17 +77,23 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
   if (isPlayer2Human) {
     playerFields.forEach((elem) => {
       elem.addEventListener('click', () => {
-        if (!isPlayersTurn && elem.textContent !== 'X') {
+        if (!isPlayersTurn) {
           const row = breakUpFieldId(elem).row;
           const column = breakUpFieldId(elem).column;
 
-          enemy.attackGameboard(playerGameboard, row, column);
-          displayAttack(elem);
+          const isAttackTookPlace = enemy.attackGameboard(
+            playerGameboard,
+            row,
+            column
+          );
+          if (isAttackTookPlace) {
+            displayAttack(elem);
 
-          isPlayersTurn = true;
+            isPlayersTurn = true;
 
-          if (playerGameboard.isFleetDestroyed()) {
-            displayWinner(enemy.name);
+            if (playerGameboard.isFleetDestroyed()) {
+              displayWinner(enemy.name);
+            }
           }
         }
       });
