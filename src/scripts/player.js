@@ -9,6 +9,7 @@ const Player = (playerName, isHuman) => {
       return false;
     }
     gameboard.receiveAttack(coordY, coordX);
+    return true;
   };
 
   const aiAttack = (gameboard) => {
