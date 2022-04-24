@@ -37,6 +37,8 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
   const enemyFields = document.querySelectorAll('.enemy-field');
 
   enemyFields.forEach((elem) => {
+    elem.style.cursor = 'pointer';
+
     elem.addEventListener('click', () => {
       if (isPlayersTurn) {
         const row = breakUpFieldId(elem).row;
@@ -48,7 +50,9 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
           column
         );
         if (isAttackTookPlace) {
-          displayAttack(elem);
+          const attackedField = row * 10 + column;
+          const hitReport = reportHit(enemyGameboard, attackedField);
+          displayAttack(elem, hitReport);
 
           isPlayersTurn = false;
 
@@ -63,7 +67,8 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
         const attackField = document.querySelector(
           `#player-${attackedFieldNumber}`
         );
-        displayAttack(attackField);
+        const hitReport = reportHit(playerGameboard, attackedFieldNumber);
+        displayAttack(attackField, hitReport);
 
         isPlayersTurn = true;
 
@@ -76,6 +81,8 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
 
   if (isPlayer2Human) {
     playerFields.forEach((elem) => {
+      elem.style.cursor = 'pointer';
+
       elem.addEventListener('click', () => {
         if (!isPlayersTurn) {
           const row = breakUpFieldId(elem).row;
@@ -87,7 +94,9 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
             column
           );
           if (isAttackTookPlace) {
-            displayAttack(elem);
+            const attackedField = row * 10 + column;
+            const hitReport = reportHit(playerGameboard, attackedField);
+            displayAttack(elem, hitReport);
 
             isPlayersTurn = true;
 
@@ -98,6 +107,15 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
         }
       });
     });
+  }
+}
+
+function reportHit(gameboard, fieldNumber) {
+  const attackedFieldContent = gameboard.displayGameboard()[fieldNumber];
+  if (typeof attackedFieldContent === 'string') {
+    return true;
+  } else {
+    return false;
   }
 }
 
