@@ -8,10 +8,12 @@ import { Player } from './player';
 import Gameboard from './gameboard';
 import {
   displayAttack,
-  displayGameboardGrid,
+  displayRandomGrid,
+  displayPlayerGrid,
   displayShipList,
   displayWinner,
 } from './dom';
+import { breakUpFieldId } from './drag-n-drop';
 
 let isPlayersTurn = true;
 
@@ -25,12 +27,14 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
   const playerGameboard = Gameboard();
   const enemyGameboard = Gameboard();
 
-  playerGameboard.placeShipsRandomly();
+  // loadShips(playerGameboard);
   enemyGameboard.placeShipsRandomly();
 
-  displayGameboardGrid(playerGameboard.displayGameboard(), 'player');
-  displayGameboardGrid(enemyGameboard.displayGameboard(), 'enemy');
+  displayPlayerGrid(playerGameboard, 'player');
+  displayRandomGrid(enemyGameboard, 'enemy');
 
+  // playerGameboard.placeShipsRandomly();
+  // enemyGameboard.placeShipsRandomly();
   displayShipList();
 
   const playerFields = document.querySelectorAll('.player-field');
@@ -117,12 +121,4 @@ function reportHit(gameboard, fieldNumber) {
   } else {
     return false;
   }
-}
-
-function breakUpFieldId(filed) {
-  const filedNumber = Number(filed.id.split('-')[1]);
-  const row = Math.floor(filedNumber / 10);
-  const column = filedNumber - row * 10;
-
-  return { row, column };
 }

@@ -1,17 +1,57 @@
-import { makeDragable } from './drag-n-drop';
+import {
+  makeDragable,
+  dragEnter,
+  dragLeave,
+  dragOver,
+  drop,
+} from './drag-n-drop';
 
 const _battlefieldContainer = document.querySelector('.bf-container');
 const _gameboardContainer = document.querySelector('.gb-container');
 
-function displayGameboardGrid(gameboardArray, gameboardOwner) {
+function displayRandomGrid(gameboard, gameboardOwner) {
   const gridContainer = document.createElement('div');
   gridContainer.classList.add(`gb-${gameboardOwner}`);
 
-  gameboardArray.forEach((elem, index) => {
+  gameboard.displayGameboard().forEach((elem, index) => {
     const gbField = document.createElement('div');
     gbField.classList.add(`${gameboardOwner}-field`);
     gbField.id = `${gameboardOwner}-${index}`;
-    gbField.textContent = elem;
+
+    if (typeof elem === 'string') {
+      gbField.style.backgroundColor = 'var(--ship-field-bg-clr)';
+    } else {
+      gbField.style.backgroundColor = 'var(--filed-bg-clr)';
+    }
+
+    gridContainer.appendChild(gbField);
+  });
+
+  _gameboardContainer.appendChild(gridContainer);
+}
+
+function displayPlayerGrid(gameboard, gameboardOwner) {
+  const gridContainer = document.createElement('div');
+  gridContainer.classList.add(`gb-${gameboardOwner}`);
+
+  gameboard.displayGameboard().forEach((elem, index) => {
+    const gbField = document.createElement('div');
+    gbField.classList.add(`${gameboardOwner}-field`);
+    gbField.id = `${gameboardOwner}-${index}`;
+
+    gbField.addEventListener('dragenter', dragEnter);
+    gbField.addEventListener('dragover', dragOver);
+    gbField.addEventListener('dragleave', dragLeave);
+    gbField.addEventListener('drop', (e) => {
+      const coloringData = drop(e, gameboard);
+      _displayDroppedShip(
+        gameboardOwner,
+        coloringData.startFieldNumber,
+        coloringData.shipLength,
+        coloringData.isVertical
+      );
+    });
+
     gridContainer.appendChild(gbField);
   });
 
@@ -24,9 +64,9 @@ function cleanOutBFContainer() {
 
 function displayAttack(field, isShip) {
   if (isShip) {
-    field.classList.add('hit');
+    field.style.backgroundColor = 'var(--hit-bg-clr)';
   } else {
-    field.classList.add('attacked');
+    field.style.backgroundColor = 'var(--attacked-bg-clr)';
   }
 }
 
@@ -87,12 +127,32 @@ function _creatShipListItem(shipname, shipLength) {
   return item;
 }
 
+function _displayDroppedShip(
+  gameboardOwner,
+  firstColoredFiledNumber,
+  numberOfColoredFields,
+  isClooringDirectionVertical
+) {
+  if (isClooringDirectionVertical) {
+  } else {
+    for (
+      let i = firstColoredFiledNumber;
+      i < firstColoredFiledNumber + numberOfColoredFields;
+      i++
+    ) {
+      const field = document.getElementById(`${gameboardOwner}-${i}`);
+      field.style.backgroundColor = 'var(--ship-field-bg-clr)';
+    }
+  }
+}
+
 function _convertToId(name) {
   return name.toLowerCase().replace(/ /g, '-');
 }
 
 export {
-  displayGameboardGrid,
+  displayRandomGrid,
+  displayPlayerGrid,
   cleanOutBFContainer,
   displayAttack,
   displayWinner,
