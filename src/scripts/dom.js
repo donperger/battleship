@@ -1,9 +1,12 @@
+import rotateSVG from '../img/rotate-svgrepo-com.svg';
+
 import {
   makeDragable,
   dragEnter,
   dragLeave,
   dragOver,
   drop,
+  setDirection,
 } from './drag-n-drop';
 
 const _battlefieldContainer = document.querySelector('.bf-container');
@@ -50,6 +53,7 @@ function displayPlayerGrid(gameboard, gameboardOwner) {
         coloringData.shipLength,
         coloringData.isVertical
       );
+      setDirection(false);
     });
 
     gridContainer.appendChild(gbField);
@@ -84,7 +88,7 @@ function displayShipList() {
   shipListContainer.textContent = 'Place ships';
   _battlefieldContainer.appendChild(shipListContainer);
 
-  const shipList = document.createElement('ul');
+  const shipList = document.createElement('div');
   shipList.classList.add('ship-list');
   shipListContainer.appendChild(shipList);
 
@@ -105,13 +109,30 @@ function displayShipList() {
 }
 
 function _creatShipListItem(shipname, shipLength) {
-  const item = document.createElement('li');
+  let isShipRotated = false;
+  const item = document.createElement('div');
   item.textContent = shipname;
+
+  const shipContId = _convertToId(shipname);
+
+  const rotBtn = document.createElement('button');
+  rotBtn.classList.add('rotate-btn');
+  rotBtn.id = `${shipContId}-btn`;
+  const rotateImg = document.createElement('img');
+  rotateImg.src = './8f7b2067fc665eeb0aed.svg';
+  rotateImg.style.width = '1rem';
+
+  rotBtn.addEventListener('click', () => {
+    isShipRotated = !isShipRotated;
+    _rotateShip(shipContId, isShipRotated, item);
+    setDirection(isShipRotated);
+  });
+  rotBtn.appendChild(rotateImg);
+  item.appendChild(rotBtn);
 
   const shipContainer = document.createElement('div');
   shipContainer.classList.add('ship-container');
 
-  const shipContId = _convertToId(shipname);
   shipContainer.id = shipContId;
 
   for (let i = 0; i < shipLength; i++) {
@@ -120,7 +141,7 @@ function _creatShipListItem(shipname, shipLength) {
     shipContainer.appendChild(shipField);
   }
 
-  makeDragable(shipContainer);
+  makeDragable(shipContainer, isShipRotated);
 
   item.appendChild(shipContainer);
 
@@ -134,6 +155,14 @@ function _displayDroppedShip(
   isClooringDirectionVertical
 ) {
   if (isClooringDirectionVertical) {
+    for (
+      let i = firstColoredFiledNumber;
+      i < firstColoredFiledNumber + numberOfColoredFields * 10;
+      i += 10
+    ) {
+      const field = document.getElementById(`${gameboardOwner}-${i}`);
+      field.style.backgroundColor = 'var(--ship-field-bg-clr)';
+    }
   } else {
     for (
       let i = firstColoredFiledNumber;
@@ -146,8 +175,25 @@ function _displayDroppedShip(
   }
 }
 
+function _rotateShip(shipId, direction, parentElement) {
+  const shipCont = document.getElementById(shipId);
+  if (direction) {
+    shipCont.style.gridAutoFlow = 'row';
+  } else {
+    shipCont.style.gridAutoFlow = 'column';
+  }
+
+  parentElement.removeChild(parentElement.lastChild);
+  parentElement.appendChild(shipCont);
+}
+
 function _convertToId(name) {
   return name.toLowerCase().replace(/ /g, '-');
+}
+
+function removeShipFromList(shipContId) {
+  const shipListRepresentation = document.getElementById(shipContId);
+  shipListRepresentation.style.display = 'none';
 }
 
 export {
@@ -157,4 +203,5 @@ export {
   displayAttack,
   displayWinner,
   displayShipList,
+  removeShipFromList,
 };

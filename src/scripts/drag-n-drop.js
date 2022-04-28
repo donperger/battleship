@@ -1,3 +1,7 @@
+import { removeShipFromList } from './dom';
+
+let isVertical = false;
+
 function makeDragable(elem) {
   elem.setAttribute('draggable', true);
   elem.addEventListener('dragstart', dragStart);
@@ -24,14 +28,12 @@ function dragLeave(e) {
 function drop(e, gameboard) {
   e.target.classList.remove('drag-over');
 
-  // get the draggable element
   const id = e.dataTransfer.getData('text/plain');
   const draggable = document.getElementById(id);
 
   let shipLength = draggable.childElementCount;
   let startField = breakUpFieldId(e.target);
   let startFieldNumber = startField.row * 10 + startField.column;
-  let isVertical = false;
 
   _placeShipOnBoard(
     gameboard,
@@ -40,6 +42,8 @@ function drop(e, gameboard) {
     startField.column,
     isVertical
   );
+
+  removeShipFromList(id);
 
   return { startFieldNumber, shipLength, isVertical };
 }
@@ -56,9 +60,20 @@ function breakUpFieldId(filed) {
   return { row, column };
 }
 
-//Implement ship rotation
+function setDirection(direction) {
+  isVertical = direction;
+}
+
 //Constraint placing
 //While someone is placing ships no one can attack
 //cleaning
 
-export { makeDragable, dragEnter, dragLeave, dragOver, drop, breakUpFieldId };
+export {
+  makeDragable,
+  dragEnter,
+  dragLeave,
+  dragOver,
+  drop,
+  breakUpFieldId,
+  setDirection,
+};
