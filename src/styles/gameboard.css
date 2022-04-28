@@ -2,7 +2,7 @@
   --field-border-clr: #0d0d0d;
   --filed-bg-clr: #f2c335;
   --attacked-bg-clr: #fff;
-  --hit-bg-clr: ;
+  --hit-bg-clr: #ff0000;
 }
 
 .gb-container {
@@ -11,7 +11,8 @@
   justify-content: space-around;
 }
 
-.gb-container > div[class^='gb'] {
+.gb-player,
+.gb-enemy {
   box-sizing: border-box;
   margin: 1rem;
   display: grid;
@@ -20,7 +21,8 @@
   place-items: center;
 }
 
-div[class^='gb'] > div[class$='field'],
+.player-field,
+.enemy-field,
 .hit {
   border: 0.2rem solid var(--field-border-clr);
   width: 100%;
@@ -28,10 +30,9 @@ div[class^='gb'] > div[class$='field'],
 }
 
 div[class$='field'] {
-  cursor: pointer;
   background-color: var(--filed-bg-clr);
 }
 
-.hit {
-  background-color: var(--attacked-bg-clr);
+.drag-over {
+  border: dashed 0.2rem red;
 }
