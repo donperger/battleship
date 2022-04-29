@@ -47,13 +47,15 @@ function displayPlayerGrid(gameboard, gameboardOwner) {
     gbField.addEventListener('dragleave', dragLeave);
     gbField.addEventListener('drop', (e) => {
       const coloringData = drop(e, gameboard);
-      _displayDroppedShip(
-        gameboardOwner,
-        coloringData.startFieldNumber,
-        coloringData.shipLength,
-        coloringData.isVertical
-      );
-      setDirection(false);
+      if (coloringData) {
+        _displayDroppedShip(
+          gameboardOwner,
+          coloringData.startFieldNumber,
+          coloringData.shipLength,
+          coloringData.isVertical
+        );
+        setDirection(false);
+      }
     });
 
     gridContainer.appendChild(gbField);

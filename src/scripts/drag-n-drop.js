@@ -35,7 +35,7 @@ function drop(e, gameboard) {
   let startField = breakUpFieldId(e.target);
   let startFieldNumber = startField.row * 10 + startField.column;
 
-  _placeShipOnBoard(
+  let isShipPlaced = _placeShipOnBoard(
     gameboard,
     shipLength,
     startField.row,
@@ -43,13 +43,17 @@ function drop(e, gameboard) {
     isVertical
   );
 
-  removeShipFromList(id);
+  if (isShipPlaced) {
+    removeShipFromList(id);
 
-  return { startFieldNumber, shipLength, isVertical };
+    return { startFieldNumber, shipLength, isVertical };
+  }
 }
 
 function _placeShipOnBoard(gameboard, length, y, x, direction) {
-  gameboard.placeShip(length, y, x, direction);
+  const isShipPlaced = gameboard.placeShip(length, y, x, direction);
+
+  return isShipPlaced;
 }
 
 function breakUpFieldId(filed) {
@@ -63,10 +67,6 @@ function breakUpFieldId(filed) {
 function setDirection(direction) {
   isVertical = direction;
 }
-
-//Constraint placing
-//While someone is placing ships no one can attack
-//cleaning
 
 export {
   makeDragable,
