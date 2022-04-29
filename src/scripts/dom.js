@@ -198,6 +198,14 @@ function removeShipFromList(shipContId) {
   shipListRepresentation.style.display = 'none';
 }
 
+function _disableClick(element) {
+  element.style.pointerEvents = 'none';
+}
+
+function _enableClick(element) {
+  element.style.pointerEvents = 'auto';
+}
+
 export {
   displayRandomGrid,
   displayPlayerGrid,
