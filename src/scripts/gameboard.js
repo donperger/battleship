@@ -189,6 +189,10 @@ const Gameboard = () => {
     return { row, column, direction };
   }
 
+  function isFleetPlaced() {
+    return patrolBoat && submarine && destroyer && battleship && carrier;
+  }
+
   return {
     displayGameboard,
     displayAttacks,
@@ -197,6 +201,7 @@ const Gameboard = () => {
     displayShips,
     isFleetDestroyed,
     placeShipsRandomly,
+    isFleetPlaced,
   };
 };
 
