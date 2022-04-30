@@ -4,7 +4,36 @@
   left: 0;
   width: 100vw;
   height: 10vh;
-  background-color: rgba(66, 66, 66, 0.3);
+  padding: 1rem;
+  background-color: rgba(66, 66, 66, 0.8);
+  color: #f2f2f2;
   font-weight: 600;
   font-size: 3rem;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.play-again-btn {
+  width: 10rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  border: 0.15rem solid #000;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  font-weight: 600;
+  background: linear-gradient(to bottom, #7c7a7a 5%, #000000 100%);
+  background-color: #7c7a7a;
+  color: #fff;
+}
+
+.play-again-btn:hover {
+  background: linear-gradient(to top, #7c7a7a 5%, #000000 100%);
+}
+
+.play-again-btn:active {
+  position: relative;
+  top: 0.2rem;
 }
