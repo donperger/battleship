@@ -1,6 +1,12 @@
 import { removeShipFromList } from './dom';
 
-let isVertical = false;
+const _directions = [
+  { id: 'patrol-boat', direction: false },
+  { id: 'submarine', direction: false },
+  { id: 'destroyer', direction: false },
+  { id: 'battleship', direction: false },
+  { id: 'carrier', direction: false },
+];
 
 function makeDragable(elem) {
   elem.setAttribute('draggable', true);
@@ -31,22 +37,25 @@ function drop(e, gameboard) {
   const id = e.dataTransfer.getData('text/plain');
   const draggable = document.getElementById(id);
 
-  let shipLength = draggable.childElementCount;
-  let startField = breakUpFieldId(e.target);
-  let startFieldNumber = startField.row * 10 + startField.column;
+  const shipLength = draggable.childElementCount;
+  const startField = breakUpFieldId(e.target);
+  const startFieldNumber = startField.row * 10 + startField.column;
+  const shipDirection = _directions.filter(
+    (elem) => elem.id === draggable.id
+  )[0].direction;
 
-  let isShipPlaced = _placeShipOnBoard(
+  const isShipPlaced = _placeShipOnBoard(
     gameboard,
     shipLength,
     startField.row,
     startField.column,
-    isVertical
+    shipDirection
   );
 
   if (isShipPlaced) {
     removeShipFromList(id);
 
-    return { startFieldNumber, shipLength, isVertical };
+    return { startFieldNumber, shipLength, shipDirection };
   }
 }
 
@@ -64,8 +73,10 @@ function breakUpFieldId(filed) {
   return { row, column };
 }
 
-function setDirection(direction) {
-  isVertical = direction;
+function setShipDirection(shipName, direction) {
+  _directions.forEach((elem) => {
+    if (elem.id === shipName) elem.direction = direction;
+  });
 }
 
 export {
@@ -75,5 +86,5 @@ export {
   dragOver,
   drop,
   breakUpFieldId,
-  setDirection,
+  setShipDirection,
 };

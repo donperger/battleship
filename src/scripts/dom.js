@@ -6,7 +6,7 @@ import {
   dragLeave,
   dragOver,
   drop,
-  setDirection,
+  setShipDirection,
 } from './drag-n-drop';
 
 const _battlefieldContainer = document.querySelector('.bf-container');
@@ -52,9 +52,8 @@ function displayPlayerGrid(gameboard, gameboardOwner) {
           gameboardOwner,
           coloringData.startFieldNumber,
           coloringData.shipLength,
-          coloringData.isVertical
+          coloringData.shipDirection
         );
-        setDirection(false);
       }
 
       if (gameboard.isFleetPlaced()) {
@@ -156,7 +155,7 @@ function _creatShipListItem(shipname, shipLength) {
   rotBtn.addEventListener('click', () => {
     isShipRotated = !isShipRotated;
     _rotateShip(shipContId, isShipRotated, item);
-    setDirection(isShipRotated);
+    setShipDirection(shipContId, isShipRotated);
   });
   rotBtn.appendChild(rotateImg);
   cardHeader.appendChild(rotBtn);
@@ -227,6 +226,18 @@ function _convertToId(name) {
 function removeShipFromList(shipContId) {
   const shipListRepresentation = document.getElementById(shipContId);
   shipListRepresentation.style.display = 'none';
+}
+
+function _convertToKey(shipName) {
+  const words = shipName.toLowerCase().split(' ');
+  const formattedWords = words.map((elem, index) => {
+    if (index === 0) {
+      return elem;
+    } else {
+      return elem[0].toUpperCase() + elem.substring(1);
+    }
+  });
+  return formattedWords.join();
 }
 
 function _disableClick(element) {
