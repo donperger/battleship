@@ -56,6 +56,13 @@ function displayPlayerGrid(gameboard, gameboardOwner) {
         );
         setDirection(false);
       }
+
+      if (gameboard.isFleetPlaced()) {
+        const shipListContainer = document.querySelector(
+          '.ship-list-container'
+        );
+        shipListContainer.style.display = 'none';
+      }
     });
 
     gridContainer.appendChild(gbField);
@@ -87,7 +94,12 @@ function displayWinner(winner) {
 function displayShipList() {
   const shipListContainer = document.createElement('div');
   shipListContainer.classList.add('ship-list-container');
-  shipListContainer.textContent = 'Place ships';
+
+  const instruction = document.createElement('h1');
+  instruction.classList.add('instruction');
+  instruction.textContent = 'Deploy your ships, Captain!';
+  shipListContainer.appendChild(instruction);
+
   _battlefieldContainer.appendChild(shipListContainer);
 
   const shipList = document.createElement('div');
@@ -113,7 +125,15 @@ function displayShipList() {
 function _creatShipListItem(shipname, shipLength) {
   let isShipRotated = false;
   const item = document.createElement('div');
-  item.textContent = shipname;
+  item.classList.add('ship-card');
+
+  const cardHeader = document.createElement('div');
+  cardHeader.classList.add('card-header');
+
+  const cardTitle = document.createElement('span');
+  cardTitle.classList.add('card-title');
+  cardTitle.textContent = shipname;
+  cardHeader.appendChild(cardTitle);
 
   const shipContId = _convertToId(shipname);
 
@@ -122,7 +142,6 @@ function _creatShipListItem(shipname, shipLength) {
   rotBtn.id = `${shipContId}-btn`;
   const rotateImg = document.createElement('img');
   rotateImg.src = './8f7b2067fc665eeb0aed.svg';
-  rotateImg.style.width = '1rem';
 
   rotBtn.addEventListener('click', () => {
     isShipRotated = !isShipRotated;
@@ -130,7 +149,9 @@ function _creatShipListItem(shipname, shipLength) {
     setDirection(isShipRotated);
   });
   rotBtn.appendChild(rotateImg);
-  item.appendChild(rotBtn);
+  cardHeader.appendChild(rotBtn);
+
+  item.appendChild(cardHeader);
 
   const shipContainer = document.createElement('div');
   shipContainer.classList.add('ship-container');
