@@ -31,3 +31,21 @@ test('Computer can attack a gameboard', () => {
 test(`Players can't attack an attacked field`, () => {
   expect(testCompPlayer.attackGameboard(testGameboard, 0, 5)).toBe(false);
 });
+
+test('AI attacks next field if the last attack was a hit', () => {
+  testGameboard.placeShip(3, 4, 1, false);
+  expect(testGameboard.displayGameboard().slice(40, 45)).toStrictEqual([
+    0,
+    'sb',
+    'sb',
+    'sb',
+    0,
+  ]);
+  testCompPlayer.attackGameboard(testGameboard, 4, 2);
+  expect(testGameboard.displayAttacks().slice(40, 45)).toStrictEqual([
+    0, 0, 1, 0, 0,
+  ]);
+  expect(
+    [41, 42, 32, 52].includes(testCompPlayer.aiAttack(testGameboard))
+  ).toBeTruthy();
+});
