@@ -14,6 +14,7 @@
 
 .instruction {
   text-align: center;
+  margin: 1rem;
 }
 
 .ship-container {
@@ -28,6 +29,7 @@
   justify-content: space-around;
   align-content: space-around;
   flex-wrap: wrap;
+  overflow: auto;
 }
 
 .ship-card {
