@@ -21,11 +21,11 @@ function displayRandomGrid(gameboard, gameboardOwner) {
     gbField.classList.add(`${gameboardOwner}-field`);
     gbField.id = `${gameboardOwner}-${index}`;
 
-    if (typeof elem === 'string') {
-      gbField.style.backgroundColor = 'var(--ship-field-bg-clr)';
-    } else {
-      gbField.style.backgroundColor = 'var(--filed-bg-clr)';
-    }
+    // if (typeof elem === 'string') {
+    //   gbField.style.backgroundColor = 'var(--ship-field-bg-clr)';
+    // } else {
+    //   gbField.style.backgroundColor = 'var(--filed-bg-clr)';
+    // }
 
     gridContainer.appendChild(gbField);
   });
@@ -228,6 +228,49 @@ function removeShipFromList(shipContId) {
   shipListRepresentation.style.display = 'none';
 }
 
+function changeGridElementsBorder(startElem, draggedElement, isRemove) {
+  const gameboardOwner = startElem.id.split('-')[0];
+  const numOfStartElem = Number(startElem.id.split('-')[1]);
+  const isVertical = draggedElement.style.gridAutoFlow === 'row';
+
+  const isPlacingValid = _checkPlacingValidity(
+    numOfStartElem,
+    draggedElement.childElementCount,
+    isVertical
+  );
+  if (!isPlacingValid) {
+    return false;
+  }
+  for (let i = 0; i < draggedElement.childElementCount; i++) {
+    let elem;
+    if (isVertical) {
+      elem = document.getElementById(
+        `${gameboardOwner}-${numOfStartElem + i * 10}`
+      );
+    } else {
+      elem = document.getElementById(`${gameboardOwner}-${numOfStartElem + i}`);
+    }
+
+    if (isRemove) {
+      elem.classList.remove('drag-over');
+    } else {
+      elem.classList.add('drag-over');
+    }
+  }
+}
+
+function _checkPlacingValidity(startFieldNumber, shipLength, isVertical) {
+  if (isVertical) {
+    return startFieldNumber + (shipLength - 1) * 10 < 100;
+  } else {
+    const startFieldDecimal = Math.floor(startFieldNumber / 10);
+    const endFieldDecimal = Math.floor(
+      (startFieldNumber + shipLength - 1) / 10
+    );
+    return startFieldDecimal === endFieldDecimal;
+  }
+}
+
 export {
   displayRandomGrid,
   displayPlayerGrid,
@@ -237,4 +280,5 @@ export {
   displayShipList,
   removeShipFromList,
   hideWinner,
+  changeGridElementsBorder,
 };

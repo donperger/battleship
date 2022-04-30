@@ -1,4 +1,6 @@
-import { removeShipFromList } from './dom';
+import { changeGridElementsBorder, removeShipFromList } from './dom';
+
+let draggedElement;
 
 const _directions = [
   { id: 'patrol-boat', direction: false },
@@ -15,24 +17,25 @@ function makeDragable(elem) {
 
 function dragStart(e) {
   e.dataTransfer.setData('text/plain', e.target.id);
+  draggedElement = e.target;
 }
 
 function dragEnter(e) {
   e.preventDefault();
-  e.target.classList.add('drag-over');
+  changeGridElementsBorder(e.target, draggedElement, false);
 }
 
 function dragOver(e) {
   e.preventDefault();
-  e.target.classList.add('drag-over');
+  changeGridElementsBorder(e.target, draggedElement, false);
 }
 
 function dragLeave(e) {
-  e.target.classList.remove('drag-over');
+  changeGridElementsBorder(e.target, draggedElement, true);
 }
 
 function drop(e, gameboard) {
-  e.target.classList.remove('drag-over');
+  changeGridElementsBorder(e.target, draggedElement, true);
 
   const id = e.dataTransfer.getData('text/plain');
   const draggable = document.getElementById(id);
