@@ -228,26 +228,6 @@ function removeShipFromList(shipContId) {
   shipListRepresentation.style.display = 'none';
 }
 
-function _convertToKey(shipName) {
-  const words = shipName.toLowerCase().split(' ');
-  const formattedWords = words.map((elem, index) => {
-    if (index === 0) {
-      return elem;
-    } else {
-      return elem[0].toUpperCase() + elem.substring(1);
-    }
-  });
-  return formattedWords.join();
-}
-
-function _disableClick(element) {
-  element.style.pointerEvents = 'none';
-}
-
-function _enableClick(element) {
-  element.style.pointerEvents = 'auto';
-}
-
 export {
   displayRandomGrid,
   displayPlayerGrid,
