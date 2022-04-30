@@ -46,6 +46,6 @@ test('AI attacks next field if the last attack was a hit', () => {
     0, 0, 1, 0, 0,
   ]);
   expect(
-    [41, 42, 32, 52].includes(testCompPlayer.aiAttack(testGameboard))
+    [41, 43, 32, 52].includes(testCompPlayer.aiAttack(testGameboard))
   ).toBeTruthy();
 });
