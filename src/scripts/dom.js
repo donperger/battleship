@@ -21,12 +21,6 @@ function displayRandomGrid(gameboard, gameboardOwner) {
     gbField.classList.add(`${gameboardOwner}-field`);
     gbField.id = `${gameboardOwner}-${index}`;
 
-    // if (typeof elem === 'string') {
-    //   gbField.style.backgroundColor = 'var(--ship-field-bg-clr)';
-    // } else {
-    //   gbField.style.backgroundColor = 'var(--filed-bg-clr)';
-    // }
-
     gridContainer.appendChild(gbField);
   });
 
