@@ -12,6 +12,8 @@ import {
   displayPlayerGrid,
   displayShipList,
   displayWinner,
+  cleanOutGBContainer,
+  hideWinner,
 } from './dom';
 import { breakUpFieldId } from './drag-n-drop';
 
@@ -27,14 +29,14 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
   const playerGameboard = Gameboard();
   const enemyGameboard = Gameboard();
 
-  // loadShips(playerGameboard);
   enemyGameboard.placeShipsRandomly();
+  // playerGameboard.placeShipsRandomly();
 
   displayPlayerGrid(playerGameboard, 'player');
+  // displayRandomGrid(playerGameboard, 'player');
+
   displayRandomGrid(enemyGameboard, 'enemy');
 
-  // playerGameboard.placeShipsRandomly();
-  // enemyGameboard.placeShipsRandomly();
   displayShipList();
 
   const playerFields = document.querySelectorAll('.player-field');
@@ -61,7 +63,7 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
           isPlayersTurn = false;
 
           if (enemyGameboard.isFleetDestroyed()) {
-            displayWinner(player.name);
+            stateWinner(player);
           }
         }
       }
@@ -77,7 +79,7 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
         isPlayersTurn = true;
 
         if (playerGameboard.isFleetDestroyed()) {
-          displayWinner(enemy.name);
+          stateWinner(enemy);
         }
       }
     });
@@ -105,7 +107,7 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
             isPlayersTurn = true;
 
             if (playerGameboard.isFleetDestroyed()) {
-              displayWinner(enemy.name);
+              stateWinner(enemy);
             }
           }
         }
@@ -121,4 +123,14 @@ function reportHit(gameboard, fieldNumber) {
   } else {
     return false;
   }
+}
+
+function stateWinner(winner) {
+  displayWinner(winner.name);
+  const playAgainBtn = document.querySelector('.play-again-btn');
+  playAgainBtn.addEventListener('click', () => {
+    cleanOutGBContainer();
+    setUpGame('Human', 'Computer', false);
+    hideWinner();
+  });
 }

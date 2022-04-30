@@ -61,7 +61,7 @@ function displayPlayerGrid(gameboard, gameboardOwner) {
         const shipListContainer = document.querySelector(
           '.ship-list-container'
         );
-        shipListContainer.style.display = 'none';
+        shipListContainer.parentNode.removeChild(shipListContainer);
       }
     });
 
@@ -71,8 +71,8 @@ function displayPlayerGrid(gameboard, gameboardOwner) {
   _gameboardContainer.appendChild(gridContainer);
 }
 
-function cleanOutBFContainer() {
-  _battlefieldContainer.textContent = '';
+function cleanOutGBContainer() {
+  _gameboardContainer.textContent = '';
 }
 
 function displayAttack(field, isShip) {
@@ -86,9 +86,19 @@ function displayAttack(field, isShip) {
 function displayWinner(winner) {
   const winnerDiv = document.createElement('div');
   winnerDiv.classList.add('winner');
-  winnerDiv.textContent = `Congratulation ${winner} you are the best fleet captain!`;
+  winnerDiv.textContent = `Congratulation ${winner}`;
+
+  const playAgainBtn = document.createElement('button');
+  playAgainBtn.textContent = 'Play again';
+  playAgainBtn.classList.add('play-again-btn');
+  winnerDiv.appendChild(playAgainBtn);
 
   _battlefieldContainer.appendChild(winnerDiv);
+}
+
+function hideWinner() {
+  const winnerDiv = document.querySelector('.winner');
+  winnerDiv.parentNode.removeChild(winnerDiv);
 }
 
 function displayShipList() {
@@ -230,9 +240,10 @@ function _enableClick(element) {
 export {
   displayRandomGrid,
   displayPlayerGrid,
-  cleanOutBFContainer,
+  cleanOutGBContainer,
   displayAttack,
   displayWinner,
   displayShipList,
   removeShipFromList,
+  hideWinner,
 };
