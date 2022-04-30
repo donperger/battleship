@@ -77,9 +77,13 @@ const Player = (playerName, isHuman) => {
       attackedFieldNumber + 1,
       attackedFieldNumber + 10,
     ];
-    const filteredFields = nextFields.filter((filedNum) =>
-      _checkIfFiledWasAttacked(gameboardToAttack, filedNum)
-    );
+    const filteredFields = nextFields.filter((filedNum) => {
+      if (filedNum < 0 || filedNum > 99) {
+        return false;
+      }
+      const wasAttacked = _checkIfFiledWasAttacked(gameboardToAttack, filedNum);
+      return wasAttacked;
+    });
 
     if (filteredFields[0]) {
       return filteredFields[Math.floor(Math.random() * filteredFields.length)];
