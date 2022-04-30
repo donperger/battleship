@@ -30,17 +30,13 @@ const Player = (playerName, isHuman) => {
   const aiAttack = (gameboard) => {
     let fieldToAttack;
     if (_isPreviousAtrackHit) {
-      let nextField = getRandomInt(5);
-      fieldToAttack = _getNextField(nextField, _lastAttackedField);
-      while (!_checkIfFiledWasAttacked(gameboard, fieldToAttack)) {
-        nextField = getRandomInt(5);
-        fieldToAttack = _getNextField(nextField, _lastAttackedField);
-      }
+      fieldToAttack = _getNextFieldNumber(_lastAttackedField, gameboard);
     } else {
       fieldToAttack = getRandomInt(100);
-      while (!_checkIfFiledWasAttacked(gameboard, fieldToAttack)) {
-        fieldToAttack = getRandomInt(100);
-      }
+    }
+
+    while (!_checkIfFiledWasAttacked(gameboard, fieldToAttack)) {
+      fieldToAttack = getRandomInt(100);
     }
 
     const row = Math.floor(fieldToAttack / 10);
@@ -74,15 +70,21 @@ const Player = (playerName, isHuman) => {
     }
   };
 
-  const _getNextField = (number, attackedFieldNumber) => {
-    if (number === 0) {
-      return attackedFieldNumber - 1;
-    } else if (number === 1) {
-      return attackedFieldNumber - 10;
-    } else if (number === 2) {
-      return attackedFieldNumber + 1;
+  const _getNextFieldNumber = (attackedFieldNumber, gameboardToAttack) => {
+    const nextFields = [
+      attackedFieldNumber - 1,
+      attackedFieldNumber - 10,
+      attackedFieldNumber + 1,
+      attackedFieldNumber + 10,
+    ];
+    const filteredFields = nextFields.filter((filedNum) =>
+      _checkIfFiledWasAttacked(gameboardToAttack, filedNum)
+    );
+
+    if (filteredFields[0]) {
+      return filteredFields[Math.floor(Math.random() * filteredFields.length)];
     } else {
-      return attackedFieldNumber + 10;
+      return getRandomInt(100);
     }
   };
 
