@@ -30,10 +30,8 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
   const enemyGameboard = Gameboard();
 
   enemyGameboard.placeShipsRandomly();
-  // playerGameboard.placeShipsRandomly();
 
   displayPlayerGrid(playerGameboard, 'player');
-  // displayRandomGrid(playerGameboard, 'player');
 
   displayRandomGrid(enemyGameboard, 'enemy');
 
