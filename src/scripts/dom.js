@@ -265,6 +265,107 @@ function _checkPlacingValidity(startFieldNumber, shipLength, isVertical) {
   }
 }
 
+function displaySetupForm() {
+  const setupFormCont = document.createElement('div');
+  setupFormCont.classList.add('setup-form-cont');
+  _battlefieldContainer.appendChild(setupFormCont);
+
+  const player1InfoCont = document.createElement('div');
+  player1InfoCont.classList.add('p1-info');
+  setupFormCont.appendChild(player1InfoCont);
+
+  const player1NameField = _createTextInput(
+    `First player's name`,
+    'p1-name-container',
+    'p1Name',
+    'Jane',
+    true
+  );
+  player1InfoCont.appendChild(player1NameField);
+
+  const player2InfoCont = document.createElement('div');
+  player2InfoCont.classList.add('p2-info');
+  setupFormCont.appendChild(player2InfoCont);
+
+  const playerTypeDropdown = _createDropdowntInput(
+    'Second player type',
+    'p2-type',
+    'p2Type',
+    'Computer',
+    'Human'
+  );
+  player2InfoCont.appendChild(playerTypeDropdown);
+
+  const player2NameField = _createTextInput(
+    `Second player's name`,
+    'p2-name-container',
+    'p2Name',
+    'John',
+    false
+  );
+  player2InfoCont.appendChild(player2NameField);
+
+  const playBtn = document.createElement('button');
+  playBtn.classList.add('play-btn');
+  playBtn.textContent = 'Play';
+  setupFormCont.appendChild(playBtn);
+}
+
+function _createTextInput(
+  labelTextcontent,
+  conteinerClass,
+  inputId,
+  placeholder,
+  isRequired
+) {
+  const inputCont = document.createElement('div');
+  inputCont.classList.add(conteinerClass);
+
+  const inputLabel = document.createElement('label');
+  inputLabel.setAttribute('for', inputId);
+  inputLabel.textContent = labelTextcontent;
+  inputCont.appendChild(inputLabel);
+
+  const inputField = document.createElement('input');
+  inputField.id = inputId;
+  inputField.setAttribute('placeholder', placeholder);
+  inputField.required = isRequired;
+  inputCont.appendChild(inputField);
+
+  return inputCont;
+}
+
+function _createDropdowntInput(
+  labelTextcontent,
+  conteinerClass,
+  dropdownId,
+  ...options
+) {
+  const dropdownCont = document.createElement('div');
+  dropdownCont.classList.add(conteinerClass);
+
+  const dropdownLabel = document.createElement('label');
+  dropdownLabel.setAttribute('for', dropdownId);
+  dropdownLabel.textContent = labelTextcontent;
+  dropdownCont.appendChild(dropdownLabel);
+
+  const dropdownField = document.createElement('select');
+  dropdownField.setAttribute('name', dropdownId);
+  dropdownField.id = dropdownId;
+
+  options.forEach((option) => {
+    const optionElem = document.createElement('option');
+    const optionValue = option.toLowerCase().split(' ').join('_');
+    optionElem.setAttribute('value', optionValue);
+    optionElem.textContent = option;
+    dropdownField.appendChild(optionElem);
+  });
+
+  dropdownCont.appendChild(dropdownField);
+
+  return dropdownCont;
+}
+
 export {
   displayRandomGrid,
   displayPlayerGrid,
@@ -275,4 +376,5 @@ export {
   removeShipFromList,
   hideWinner,
   changeGridElementsBorder,
+  displaySetupForm,
 };
