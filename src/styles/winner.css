@@ -1,9 +1,10 @@
 .winner {
+  box-sizing: border-box;
   position: absolute;
   top: 45vh;
   left: 0;
   width: 100vw;
-  height: 10vh;
+  height: 20vh;
   padding: 1rem;
   background-color: rgba(66, 66, 66, 0.8);
   color: #f2f2f2;
