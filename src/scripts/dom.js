@@ -9,6 +9,8 @@ import {
   setShipDirection,
 } from './drag-n-drop';
 
+import { handleTextInput } from './form';
+
 const _battlefieldContainer = document.querySelector('.bf-container');
 const _gameboardContainer = document.querySelector('.gb-container');
 
@@ -294,6 +296,9 @@ function displaySetupForm() {
     'Computer',
     'Human'
   );
+
+  playerTypeDropdown.addEventListener('change', handleTextInput);
+
   player2InfoCont.appendChild(playerTypeDropdown);
 
   const player2NameField = _createTextInput(
