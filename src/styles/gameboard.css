@@ -42,7 +42,8 @@ div[class$='field'] {
   border: dashed 0.2rem red;
 }
 
-.player-side {
+.player-side,
+.enemy-side {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -80,4 +81,11 @@ div[class$='field'] {
 .ready-btn:active {
   position: relative;
   bottom: 0.2rem;
+}
+
+.must-place-text {
+  box-sizing: border-box;
+  padding: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
