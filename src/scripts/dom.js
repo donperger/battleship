@@ -14,7 +14,18 @@ import { handleTextInput } from './form';
 const _battlefieldContainer = document.querySelector('.bf-container');
 const _gameboardContainer = document.querySelector('.gb-container');
 
-function displayRandomGrid(gameboard, gameboardOwner) {
+function displayRandomGrid(gameboard, gameboardOwner, ownerName, isPvP) {
+  _gameboardContainer.style.justifyContent = 'space-around';
+
+  const sideCont = document.createElement('div');
+  sideCont.classList.add(`${gameboardOwner}-side`);
+  _gameboardContainer.appendChild(sideCont);
+
+  const gbTitle = document.createElement('h2');
+  gbTitle.classList.add('gb-title');
+  gbTitle.textContent = `${ownerName}'s gameboard`;
+  sideCont.appendChild(gbTitle);
+
   const gridContainer = document.createElement('div');
   gridContainer.classList.add(`gb-${gameboardOwner}`);
 
@@ -25,11 +36,23 @@ function displayRandomGrid(gameboard, gameboardOwner) {
 
     gridContainer.appendChild(gbField);
   });
-
-  _gameboardContainer.appendChild(gridContainer);
+  sideCont.appendChild(gridContainer);
 }
 
-function displayPlayerGrid(gameboard, gameboardOwner) {
+function displayPlayerGrid(gameboard, gameboardOwner, ownerName, isPvP) {
+  if (isPvP) {
+    _gameboardContainer.style.justifyContent = 'flex-start';
+  }
+
+  const sideCont = document.createElement('div');
+  sideCont.classList.add(`${gameboardOwner}-side`);
+  _gameboardContainer.appendChild(sideCont);
+
+  const gbTitle = document.createElement('h2');
+  gbTitle.classList.add('gb-title');
+  gbTitle.textContent = `${ownerName}'s gameboard`;
+  sideCont.appendChild(gbTitle);
+
   const gridContainer = document.createElement('div');
   gridContainer.classList.add(`gb-${gameboardOwner}`);
 
@@ -51,19 +74,16 @@ function displayPlayerGrid(gameboard, gameboardOwner) {
           coloringData.shipDirection
         );
       }
-
-      if (gameboard.isFleetPlaced()) {
-        const shipListContainer = document.querySelector(
-          '.ship-list-container'
-        );
-        shipListContainer.parentNode.removeChild(shipListContainer);
-      }
     });
 
     gridContainer.appendChild(gbField);
   });
+  sideCont.appendChild(gridContainer);
 
-  _gameboardContainer.appendChild(gridContainer);
+  const readyButton = document.createElement('button');
+  readyButton.classList.add('ready-btn');
+  readyButton.textContent = `I'm ready`;
+  sideCont.appendChild(readyButton);
 }
 
 function cleanOutGBContainer() {
@@ -277,7 +297,7 @@ function displaySetupForm() {
   setupFormCont.appendChild(player1InfoCont);
 
   const player1NameField = _createTextInput(
-    `First player's name`,
+    `First player's name*`,
     'p1-name-container',
     'p1Name',
     'Jane',
@@ -306,13 +326,14 @@ function displaySetupForm() {
     'p2-name-container',
     'p2Name',
     'John',
-    false
+    true
   );
   player2InfoCont.appendChild(player2NameField);
 
   const playBtn = document.createElement('button');
   playBtn.classList.add('play-btn');
   playBtn.textContent = 'Play';
+  playBtn.setAttribute('type', 'button');
   setupFormCont.appendChild(playBtn);
 }
 
@@ -371,6 +392,15 @@ function _createDropdowntInput(
   return dropdownCont;
 }
 
+function hideShipList() {
+  const shipListContainer = document.querySelector('.ship-list-container');
+  shipListContainer.parentNode.removeChild(shipListContainer);
+}
+
+function deleteForm() {
+  _battlefieldContainer.removeChild(_battlefieldContainer.lastChild);
+}
+
 export {
   displayRandomGrid,
   displayPlayerGrid,
@@ -382,4 +412,6 @@ export {
   hideWinner,
   changeGridElementsBorder,
   displaySetupForm,
+  hideShipList,
+  deleteForm,
 };

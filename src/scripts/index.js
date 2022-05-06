@@ -3,6 +3,7 @@ import '../styles/main.css';
 import '../styles/gameboard.css';
 import '../styles/winner.css';
 import '../styles/ship-list.css';
+import '../styles/form.css';
 
 import { Player } from './player';
 import Gameboard from './gameboard';
@@ -14,28 +15,106 @@ import {
   displayWinner,
   cleanOutGBContainer,
   hideWinner,
+  displaySetupForm,
+  hideShipList,
+  deleteForm,
 } from './dom';
 import { breakUpFieldId } from './drag-n-drop';
+import { collectFormData, handleTextInput } from './form';
 
 let isPlayersTurn = true;
 
-setUpGame('Human', 'Computer', false);
+startGame();
+
+function startGame() {
+  displaySetupForm();
+  handleTextInput();
+
+  const playBtn = document.querySelector('.play-btn');
+  playBtn.addEventListener('click', () => {
+    const formData = collectFormData();
+    console.log('Data hs been collected');
+    if (formData.p1Name && formData.p2Name) {
+      deleteForm();
+
+      const gameData = setUpGame(
+        formData.p1Name,
+        formData.p2Name,
+        formData.isP2Human
+      );
+
+      if (!formData.isP2Human) {
+        const readyBtn = document.querySelector('.ready-btn');
+        readyBtn.addEventListener('click', () => {
+          if (gameData.playerGameboard.isFleetPlaced()) {
+            hideShipList();
+
+            gameLoop(
+              gameData.player,
+              gameData.playerGameboard,
+              gameData.enemy,
+              gameData.enemyGameboard
+            );
+          }
+        });
+      }
+    }
+  });
+}
 
 function setUpGame(player1Name, player2Name, isPlayer2Human) {
-  isPlayersTurn = true;
-
   const player = Player(player1Name, true);
   const enemy = Player(player2Name, isPlayer2Human);
   const playerGameboard = Gameboard();
   const enemyGameboard = Gameboard();
 
-  enemyGameboard.placeShipsRandomly();
-
-  displayPlayerGrid(playerGameboard, 'player');
-
-  displayRandomGrid(enemyGameboard, 'enemy');
-
+  displayPlayerGrid(playerGameboard, 'player', player.name, isPlayer2Human);
   displayShipList();
+
+  if (!isPlayer2Human) {
+    enemyGameboard.placeShipsRandomly();
+    displayRandomGrid(enemyGameboard, 'enemy', enemy.name, isPlayer2Human);
+  } else {
+    const readyBtn = document.querySelector('.ready-btn');
+    readyBtn.addEventListener('click', () => {
+      if (playerGameboard.isFleetPlaced()) {
+        cleanOutGBContainer();
+        hideShipList();
+
+        displayPlayerGrid(enemyGameboard, 'enemy', enemy.name, isPlayer2Human);
+        displayShipList();
+
+        const readyBtn = document.querySelector('.ready-btn');
+        readyBtn.addEventListener('click', () => {
+          if (enemyGameboard.isFleetPlaced()) {
+            cleanOutGBContainer();
+            hideShipList();
+
+            displayRandomGrid(
+              playerGameboard,
+              'player',
+              player.name,
+              isPlayer2Human
+            );
+            displayRandomGrid(
+              enemyGameboard,
+              'enemy',
+              enemy.name,
+              isPlayer2Human
+            );
+
+            gameLoop(player, playerGameboard, enemy, enemyGameboard);
+          }
+        });
+      }
+    });
+  }
+
+  return { player, playerGameboard, enemy, enemyGameboard };
+}
+
+function gameLoop(player, playerGameboard, enemy, enemyGameboard) {
+  isPlayersTurn = true;
 
   const playerFields = document.querySelectorAll('.player-field');
   const enemyFields = document.querySelectorAll('.enemy-field');
@@ -66,7 +145,7 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
         }
       }
 
-      if (!isPlayer2Human && !isPlayersTurn) {
+      if (enemy.comp && !isPlayersTurn) {
         const attackedFieldNumber = enemy.aiAttack(playerGameboard);
         const attackField = document.querySelector(
           `#player-${attackedFieldNumber}`
@@ -83,7 +162,7 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
     });
   });
 
-  if (isPlayer2Human) {
+  if (!enemy.comp) {
     playerFields.forEach((elem) => {
       elem.style.cursor = 'pointer';
 
@@ -128,7 +207,7 @@ function stateWinner(winner) {
   const playAgainBtn = document.querySelector('.play-again-btn');
   playAgainBtn.addEventListener('click', () => {
     cleanOutGBContainer();
-    setUpGame('Human', 'Computer', false);
     hideWinner();
+    startGame();
   });
 }
