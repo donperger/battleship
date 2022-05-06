@@ -14,7 +14,7 @@ import { handleTextInput } from './form';
 const _battlefieldContainer = document.querySelector('.bf-container');
 const _gameboardContainer = document.querySelector('.gb-container');
 
-function displayRandomGrid(gameboard, gameboardOwner, ownerName, isPvP) {
+function displayRandomGrid(gameboard, gameboardOwner, ownerName) {
   _gameboardContainer.style.justifyContent = 'space-around';
 
   const sideCont = document.createElement('div');

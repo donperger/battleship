@@ -33,7 +33,6 @@ function startGame() {
   const playBtn = document.querySelector('.play-btn');
   playBtn.addEventListener('click', () => {
     const formData = collectFormData();
-    console.log('Data hs been collected');
     if (formData.p1Name && formData.p2Name) {
       deleteForm();
 
@@ -73,7 +72,7 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
 
   if (!isPlayer2Human) {
     enemyGameboard.placeShipsRandomly();
-    displayRandomGrid(enemyGameboard, 'enemy', enemy.name, isPlayer2Human);
+    displayRandomGrid(enemyGameboard, 'enemy', enemy.name);
   } else {
     const readyBtn = document.querySelector('.ready-btn');
     readyBtn.addEventListener('click', () => {
@@ -90,18 +89,8 @@ function setUpGame(player1Name, player2Name, isPlayer2Human) {
             cleanOutGBContainer();
             hideShipList();
 
-            displayRandomGrid(
-              playerGameboard,
-              'player',
-              player.name,
-              isPlayer2Human
-            );
-            displayRandomGrid(
-              enemyGameboard,
-              'enemy',
-              enemy.name,
-              isPlayer2Human
-            );
+            displayRandomGrid(playerGameboard, 'player', player.name);
+            displayRandomGrid(enemyGameboard, 'enemy', enemy.name);
 
             gameLoop(player, playerGameboard, enemy, enemyGameboard);
           }
