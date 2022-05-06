@@ -84,6 +84,11 @@ function displayPlayerGrid(gameboard, gameboardOwner, ownerName, isPvP) {
   readyButton.classList.add('ready-btn');
   readyButton.textContent = `I'm ready`;
   sideCont.appendChild(readyButton);
+
+  const mustPlaceText = document.createElement('span');
+  mustPlaceText.classList.add('must-place-text');
+  mustPlaceText.textContent = 'You must place all you ships to be ready!';
+  sideCont.appendChild(mustPlaceText);
 }
 
 function cleanOutGBContainer() {
@@ -358,6 +363,11 @@ function _createTextInput(
   inputField.required = isRequired;
   inputCont.appendChild(inputField);
 
+  const validateText = document.createElement('span');
+  validateText.classList.add(`validate-text-${inputId}`);
+  validateText.textContent = 'This field is required!';
+  inputCont.appendChild(validateText);
+
   return inputCont;
 }
 
@@ -401,6 +411,23 @@ function deleteForm() {
   _battlefieldContainer.removeChild(_battlefieldContainer.lastChild);
 }
 
+function showValidateTexts(p1NameInput, p2Type, p2NameInput) {
+  const p1ValidateText = document.querySelector('.validate-text-p1Name');
+  const p2ValidateText = document.querySelector('.validate-text-p2Name');
+
+  if (!p1NameInput) {
+    p1ValidateText.style.display = 'inline-block';
+  } else {
+    p1ValidateText.style.display = 'none';
+  }
+
+  if (!p2NameInput && p2Type) {
+    p2ValidateText.style.display = 'inline-block';
+  } else {
+    p2ValidateText.style.display = 'none';
+  }
+}
+
 export {
   displayRandomGrid,
   displayPlayerGrid,
@@ -414,4 +441,5 @@ export {
   displaySetupForm,
   hideShipList,
   deleteForm,
+  showValidateTexts,
 };

@@ -18,6 +18,7 @@ import {
   displaySetupForm,
   hideShipList,
   deleteForm,
+  showValidateTexts,
 } from './dom';
 import { breakUpFieldId } from './drag-n-drop';
 import { collectFormData, handleTextInput } from './form';
@@ -57,6 +58,8 @@ function startGame() {
           }
         });
       }
+    } else {
+      showValidateTexts(formData.p1Name, formData.isP2Human, formData.p2Name);
     }
   });
 }

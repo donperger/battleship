@@ -14,7 +14,7 @@
   width: 25rem;
   font-weight: 600;
   font-size: 1.2rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .p2-info {
@@ -36,6 +36,7 @@
 
 .p2-name-container {
   width: 13rem;
+  position: relative;
 }
 
 .play-btn {
@@ -60,4 +61,13 @@
 .play-btn:active {
   position: relative;
   top: 0.2rem;
+}
+
+[class^='validate-text'] {
+  font-weight: 100;
+  font-size: 0.75rem;
+  color: red;
+  display: none;
+  position: absolute;
+  top: 2.6rem;
 }
