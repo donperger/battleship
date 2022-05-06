@@ -6,6 +6,8 @@
 }
 
 .gb-container {
+  box-sizing: border-box;
+  padding: 1rem;
   width: 100vw;
   height: calc(100vh - var(--header-height) - var(--footer-height));
   display: flex;
@@ -38,4 +40,44 @@ div[class$='field'] {
 
 .drag-over {
   border: dashed 0.2rem red;
+}
+
+.player-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.gb-title {
+  text-align: center;
+  font-size: 2.5rem;
+}
+
+.ready-btn {
+  box-sizing: border-box;
+  cursor: pointer;
+  background: linear-gradient(
+    to bottom,
+    var(--ship-field-bg-clr) 5%,
+    #ffc164 100%
+  );
+  background-color: var(--ship-field-bg-clr);
+  padding: 0.4rem;
+  border: 0.15rem solid #000;
+  border-radius: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.ready-btn:hover {
+  background: linear-gradient(
+    to top,
+    var(--ship-field-bg-clr) 5%,
+    #ffc164 100%
+  );
+}
+
+.ready-btn:active {
+  position: relative;
+  bottom: 0.2rem;
 }
