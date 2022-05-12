@@ -19,6 +19,7 @@ import {
   hideShipList,
   deleteForm,
   showValidateTexts,
+  deleteReadyButton,
 } from './dom';
 import { breakUpFieldId } from './drag-n-drop';
 import { collectFormData, handleTextInput } from './form';
@@ -48,6 +49,7 @@ function startGame() {
         readyBtn.addEventListener('click', () => {
           if (gameData.playerGameboard.isFleetPlaced()) {
             hideShipList();
+            deleteReadyButton();
 
             gameLoop(
               gameData.player,

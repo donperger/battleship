@@ -428,6 +428,14 @@ function showValidateTexts(p1NameInput, p2Type, p2NameInput) {
   }
 }
 
+function deleteReadyButton() {
+  const readyBtn = document.querySelector('.ready-btn');
+  const mustPlaceText = document.querySelector('.must-place-text');
+
+  readyBtn.remove();
+  mustPlaceText.remove();
+}
+
 export {
   displayRandomGrid,
   displayPlayerGrid,
@@ -442,4 +450,5 @@ export {
   hideShipList,
   deleteForm,
   showValidateTexts,
+  deleteReadyButton,
 };
